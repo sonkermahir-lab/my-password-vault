@@ -8,259 +8,1461 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-
+*{box-sizing:border-box}
 body{
-  min-height:100vh;
-  color:#fff;
-  background:linear-gradient(145deg,#070b12,#101827,#070b12);
+ margin:0;
+ font-family:Arial,sans-serif;
+ color:#fff;
+ background:linear-gradient(135deg,#05070d,#101827);
+ min-height:100vh
 }
-
+.hidden{display:none!important}
 button,input,textarea{font:inherit}
 
-.hidden{display:none!important}
-
 .login{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px
 }
-
-.login-box{
-  width:100%;
-  max-width:400px;
-  padding:30px;
-  border-radius:25px;
-  background:rgba(17,25,39,.92);
-  border:1px solid #26344b;
-  box-shadow:0 25px 80px #0008;
+.box{
+ width:100%;
+ max-width:400px;
+ padding:30px;
+ border-radius:24px;
+ background:#101827;
+ border:1px solid #26344b;
+ box-shadow:0 20px 70px #0008
 }
-
 .logo{
-  width:70px;
-  height:70px;
-  margin:0 auto 18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:20px;
-  font-size:32px;
-  background:linear-gradient(135deg,#4169ff,#743dff);
+ width:65px;
+ height:65px;
+ margin:auto auto 18px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:18px;
+ font-size:30px;
+ background:linear-gradient(135deg,#4169ff,#743dff)
 }
-
-h1{text-align:center;font-size:25px}
-.sub{text-align:center;color:#8490a5;font-size:13px;margin:8px 0 28px}
-
-.field{margin-bottom:16px}
-
+h1{text-align:center;font-size:24px;margin:0}
+.sub{
+ text-align:center;
+ color:#8290a5;
+ font-size:13px;
+ margin:8px 0 25px
+}
 label{
-  display:block;
-  color:#9da9bb;
-  font-size:12px;
-  margin-bottom:7px;
+ display:block;
+ color:#9ca8ba;
+ font-size:12px;
+ margin-bottom:6px
 }
-
+.field{margin-bottom:15px}
 input,textarea{
-  width:100%;
-  padding:13px;
-  border-radius:11px;
-  border:1px solid #29364b;
-  outline:none;
-  background:#0a111d;
-  color:#fff;
+ width:100%;
+ padding:13px;
+ color:#fff;
+ background:#080f1a;
+ border:1px solid #29364b;
+ border-radius:11px;
+ outline:none
 }
-
 input:focus,textarea:focus{border-color:#5272ff}
 
 .btn{
-  width:100%;
-  border:0;
-  padding:14px;
-  border-radius:12px;
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-  background:linear-gradient(135deg,#4169ff,#743dff);
+ width:100%;
+ padding:13px;
+ border:0;
+ border-radius:11px;
+ color:#fff;
+ font-weight:bold;
+ background:linear-gradient(135deg,#4169ff,#743dff);
+ cursor:pointer
 }
-
 .error{
-  color:#ff8585;
-  text-align:center;
-  font-size:13px;
-  margin-top:13px;
+ color:#ff8585;
+ text-align:center;
+ font-size:13px;
+ margin-top:12px
 }
 
 /* APP */
-
 header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:#080d16ee;
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid #1e293b;
+ position:sticky;
+ top:0;
+ z-index:10;
+ background:#070d16ee;
+ backdrop-filter:blur(15px);
+ border-bottom:1px solid #202c40
 }
-
-.header{
-  max-width:1100px;
-  margin:auto;
-  padding:14px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.head{
+ max-width:1100px;
+ margin:auto;
+ padding:14px 18px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between
 }
-
 .brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
+ display:flex;
+ gap:10px;
+ align-items:center
 }
-
-.brand-icon{
-  width:42px;
-  height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:12px;
-  background:linear-gradient(135deg,#4169ff,#743dff);
+.brandIcon{
+ width:42px;
+ height:42px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:12px;
+ background:linear-gradient(135deg,#4169ff,#743dff)
 }
-
 .brand small{
-  color:#718096;
-  font-size:11px;
+ color:#718096;
+ font-size:11px
 }
-
 .logout{
-  background:#111a29;
-  color:#cbd5e1;
-  border:1px solid #2a374c;
-  border-radius:9px;
-  padding:9px 13px;
-  cursor:pointer;
+ padding:9px 13px;
+ border-radius:9px;
+ border:1px solid #29374d;
+ background:#111a29;
+ color:#fff;
+ cursor:pointer
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:22px 18px 50px;
+.main{
+ max-width:1100px;
+ margin:auto;
+ padding:22px 18px 50px
 }
-
 .top{
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
+ display:flex;
+ gap:10px;
+ margin-bottom:18px
 }
-
 .search{flex:1}
-
 .add{
-  width:auto;
-  padding:0 18px;
-  white-space:nowrap;
+ width:auto;
+ padding:0 18px;
+ white-space:nowrap
 }
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-bottom:20px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+ margin-bottom:18px
 }
-
 .stat{
-  padding:15px;
-  border-radius:15px;
-  background:#0d1522;
-  border:1px solid #202c40;
+ padding:14px;
+ border-radius:14px;
+ background:#0d1522;
+ border:1px solid #202c40
 }
-
-.stat small{color:#738096}
-.stat strong{display:block;font-size:21px;margin-top:5px}
+.stat small{color:#718096}
+.stat b{
+ display:block;
+ font-size:20px;
+ margin-top:5px
+}
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:14px
 }
-
 .card{
-  padding:18px;
-  border-radius:18px;
-  background:#0d1522;
-  border:1px solid #202c40;
+ padding:17px;
+ border-radius:17px;
+ background:#0d1522;
+ border:1px solid #202c40
 }
-
-.card-title{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  margin-bottom:15px;
+.cardHead{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ margin-bottom:12px
 }
-
-.icon{
-  width:40px;
-  height:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:11px;
-  background:#17233a;
+.cardIcon{
+ width:40px;
+ height:40px;
+ border-radius:11px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:#17233a
 }
-
-.card h3{font-size:16px}
-
+.card h3{
+ margin:0;
+ font-size:16px
+}
+.date{
+ color:#68778d;
+ font-size:10px;
+ margin-top:3px
+}
 .row{
-  border-top:1px solid #1d293b;
-  padding:10px 0;
+ border-top:1px solid #1d293b;
+ padding:10px 0
 }
-
-.row-label{
-  color:#718096;
-  font-size:10px;
-  text-transform:uppercase;
-  margin-bottom:5px;
+.row label{
+ color:#718096;
+ font-size:10px;
+ text-transform:uppercase;
+ margin-bottom:5px
 }
-
-.value{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  word-break:break-all;
+.val{
+ display:flex;
+ gap:8px;
+ align-items:center;
+ word-break:break-all
 }
-
-.value span{flex:1}
-
+.val span{flex:1}
 .eye{
-  border:0;
-  border-radius:7px;
-  background:#172238;
-  color:#fff;
-  padding:7px 9px;
-  cursor:pointer;
+ border:0;
+ border-radius:7px;
+ padding:7px 9px;
+ background:#172238;
+ color:#fff;
+ cursor:pointer
 }
-
-.notes{
-  color:#9aa6b8;
-  font-size:12px;
-  line-height:1.5;
+.note{
+ color:#9aa6b8;
+ font-size:12px;
+ line-height:1.5
 }
-
 .actions{
-  display:flex;
-  gap:8px;
-  margin-top:13px;
+ display:flex;
+ gap:8px;
+ margin-top:12px
 }
-
 .actions button{
-  flex:1;
-  padding:9px;
-  border-radius:9px;
-  cursor:pointer;
-  background:#111a29;
-  color:#dbe4f2;
-  border:1px solid #29374d;
+ flex:1;
+ padding:9px;
+ border-radius:9px;
+ border:1px solid #29374d;
+ background:#111a29;
+ color:#fff;
+ cursor:pointer
+}
+.actions .del{color:#ff8585}
+
+.empty{
+ grid-column:1/-1;
+ text-align:center;
+ color:#68778d;
+ padding:60px 20px
 }
 
-.actions .delete{
+/* MODAL */
+.modal{
+ position:fixed;
+ inset:0;
+ z-index:50;
+ background:#000b;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:18px
+}
+.modalBox{
+ width:100%;
+ max-width:470px;
+ max-height:90vh;
+ overflow:auto;
+ padding:22px;
+ border-radius:20px;
+ background:#0d1522;
+ border:1px solid #29374d
+}
+.modalHead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:18px
+}
+.close{
+ border:0;
+ background:#182337;
+ color:#fff;
+ width:34px;
+ height:34px;
+ border-radius:8px;
+ cursor:pointer
+}
+.modalBtns{
+ display:flex;
+ gap:10px;
+ margin-top:18px
+}
+.cancel,.save{
+ flex:1;
+ padding:12px;
+ border-radius:10px;
+ cursor:pointer
+}
+.cancel{
+ background:#111a29;
+ border:1px solid #29374d;
+ color:#fff
+}
+.save{
+ background:linear-gradient(135deg,#4169ff,#743dff);
+ border:0;
+ color:#fff;
+ font-weight:bold
+}
+
+.toast{
+ position:fixed;
+ bottom:25px;
+ left:50%;
+ transform:translateX(-50%);
+ background:#172338;
+ border:1px solid #2d3c55;
+ padding:12px 18px;
+ border-radius:10px;
+ font-size:13px;
+ z-index:100
+}
+
+@media(max-width:700px){
+ .grid{grid-template-columns:1fr}
+ .top{flex-direction:column}
+ .add{width:100%;padding:13px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="login">
+
+ <div class="box">
+
+  <div class="logo">🔐</div>
+
+  <h1>My Password Vault</h1>
+
+  <div class="sub">
+   Secure encrypted password storage
+  </div>
+
+  <div class="field">
+   <label>Master ID</label>
+   <input id="masterId"
+          placeholder="Enter Master ID"
+          autocomplete="username">
+  </div>
+
+  <div class="field">
+   <label>Master Password</label>
+   <input id="masterPassword"
+          type="password"
+          placeholder="Enter Master Password"
+          autocomplete="current-password">
+  </div>
+
+  <button class="btn" onclick="login()">
+   LOGIN
+  </button>
+
+  <div id="loginError" class="error"></div>
+
+ </div>
+</div>
+
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+<header>
+ <div class="head">
+
+  <div class="brand">
+
+   <div class="brandIcon">🔐</div>
+
+   <div>
+    <b>My Password Vault</b><br>
+    <small>Encrypted Cloud Vault</small>
+   </div>
+
+  </div>
+
+  <button class="logout" onclick="logout()">
+   Logout
+  </button>
+
+ </div>
+</header>
+
+
+<main class="main">
+
+ <div class="top">
+
+  <input id="search"
+         class="search"
+         placeholder="🔎 Search..."
+         oninput="render()">
+
+  <button class="btn add" onclick="openAdd()">
+   ＋ Add New
+  </button>
+
+ </div>
+
+
+ <div class="stats">
+
+  <div class="stat">
+   <small>Total Entries</small>
+   <b id="count">0</b>
+  </div>
+
+  <div class="stat">
+   <small>Encryption</small>
+   <b>🔒</b>
+  </div>
+
+  <div class="stat">
+   <small>Status</small>
+   <b>Online</b>
+  </div>
+
+ </div>
+
+
+ <div id="grid" class="grid"></div>
+
+</main>
+
+</div>
+
+
+<!-- MODAL -->
+<div id="modal" class="modal hidden">
+
+ <div class="modalBox">
+
+  <div class="modalHead">
+
+   <h2 id="modalTitle">Add Password</h2>
+
+   <button class="close" onclick="closeModal()">
+    ✕
+   </button>
+
+  </div>
+
+  <div class="field">
+   <label>Heading</label>
+   <input id="title" placeholder="Example: SBI Bank">
+  </div>
+
+  <div class="field">
+   <label>Login ID</label>
+   <input id="loginId" placeholder="Enter ID / Username">
+  </div>
+
+  <div class="field">
+   <label>Password</label>
+   <input id="password" type="password"
+          placeholder="Enter password">
+  </div>
+
+  <div class="field">
+   <label>MPIN</label>
+   <input id="mpin" type="password"
+          inputmode="numeric"
+          placeholder="Enter MPIN">
+  </div>
+
+  <div class="field">
+   <label>Notes</label>
+   <textarea id="notes" rows="3"
+             placeholder="Optional notes"></textarea>
+  </div>
+
+  <div class="modalBtns">
+
+   <button class="cancel" onclick="closeModal()">
+    Cancel
+   </button>
+
+   <button class="save" onclick="saveEntry()">
+    Save Securely
+   </button>
+
+  </div>
+
+ </div>
+</div>
+
+
+<div id="toast" class="toast hidden"></div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE CONFIG
+   ===================================================== */
+
+const SUPABASE_URL =
+"https://zrvmuyqermcvsgfgkszf.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_C2-XTlz8wW7g6z3uhdI--w_uohKryB-";
+
+
+/*
+ IMPORTANT:
+ Put the SAME email here that you used
+ when you created the Supabase Auth user.
+
+ Example:
+ "yourname@gmail.com"
+*/
+
+const AUTH_EMAIL =
+"PUT-YOUR-SUPABASE-EMAIL-HERE";
+
+
+/*
+ This is your Master ID.
+
+ Change it if you want.
+*/
+
+const MASTER_ID =
+"maanu";
+
+
+const {createClient} = supabase;
+
+const client =
+createClient(
+ SUPABASE_URL,
+ SUPABASE_PUBLISHABLE_KEY
+);
+
+
+let vault=[];
+let editingIndex=-1;
+let encryptionKey=null;
+
+
+/* =====================================================
+   LOGIN
+   ===================================================== */
+
+async function login(){
+
+ const id =
+ document.getElementById("masterId")
+ .value.trim();
+
+ const password =
+ document.getElementById("masterPassword")
+ .value;
+
+ const error =
+ document.getElementById("loginError");
+
+ error.textContent="";
+
+
+ if(!id || !password){
+
+  error.textContent =
+  "Master ID and Password required.";
+
+  return;
+ }
+
+
+ if(id!==MASTER_ID){
+
+  error.textContent =
+  "Invalid Master ID.";
+
+  return;
+ }
+
+
+ if(AUTH_EMAIL.includes("PUT-YOUR")){
+
+  error.textContent =
+  "AUTH_EMAIL set karo.";
+
+  return;
+ }
+
+
+ try{
+
+  const {data,error:authError} =
+  await client.auth.signInWithPassword({
+
+   email:AUTH_EMAIL,
+
+   password:password
+
+  });
+
+
+  if(authError)
+   throw authError;
+
+
+  encryptionKey =
+  await makeKey(password);
+
+
+  document.getElementById(
+   "masterPassword"
+  ).value="";
+
+
+  document.getElementById(
+   "loginPage"
+  ).classList.add("hidden");
+
+
+  document.getElementById(
+   "app"
+  ).classList.remove("hidden");
+
+
+  await loadVault();
+
+
+ }catch(e){
+
+  console.error(e);
+
+  error.textContent =
+  "Login failed. Master Password check karo.";
+
+ }
+
+}
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+async function logout(){
+
+ await client.auth.signOut();
+
+ vault=[];
+ encryptionKey=null;
+
+ document.getElementById(
+  "app"
+ ).classList.add("hidden");
+
+ document.getElementById(
+  "loginPage"
+ ).classList.remove("hidden");
+
+ document.getElementById(
+  "masterId"
+ ).value="";
+
+ render();
+
+}
+
+
+/* =====================================================
+   CREATE ENCRYPTION KEY
+   ===================================================== */
+
+async function makeKey(password){
+
+ const encoder=
+ new TextEncoder();
+
+ const base=
+ await crypto.subtle.importKey(
+  "raw",
+  encoder.encode(password),
+  "PBKDF2",
+  false,
+  ["deriveKey"]
+ );
+
+
+ return crypto.subtle.deriveKey(
+
+  {
+   name:"PBKDF2",
+   salt:encoder.encode(
+    "MY_PASSWORD_VAULT_V1"
+   ),
+   iterations:250000,
+   hash:"SHA-256"
+  },
+
+  base,
+
+  {
+   name:"AES-GCM",
+   length:256
+  },
+
+  false,
+
+  ["encrypt","decrypt"]
+
+ );
+
+}
+
+
+/* =====================================================
+   ENCRYPT
+   ===================================================== */
+
+async function encryptData(data){
+
+ const iv=
+ crypto.getRandomValues(
+  new Uint8Array(12)
+ );
+
+ const plain=
+ new TextEncoder().encode(
+  JSON.stringify(data)
+ );
+
+
+ const encrypted=
+ await crypto.subtle.encrypt(
+  {
+   name:"AES-GCM",
+   iv:iv
+  },
+  encryptionKey,
+  plain
+ );
+
+
+ return JSON.stringify({
+
+  iv:b64(iv),
+
+  data:b64(
+   new Uint8Array(encrypted)
+  )
+
+ });
+
+}
+
+
+/* =====================================================
+   DECRYPT
+   ===================================================== */
+
+async function decryptData(text){
+
+ const obj=
+ JSON.parse(text);
+
+ const iv=
+ fromB64(obj.iv);
+
+ const encrypted=
+ fromB64(obj.data);
+
+
+ const decrypted=
+ await crypto.subtle.decrypt(
+  {
+   name:"AES-GCM",
+   iv:iv
+  },
+  encryptionKey,
+  encrypted
+ );
+
+
+ return JSON.parse(
+  new TextDecoder().decode(
+   decrypted
+  )
+ );
+
+}
+
+
+/* =====================================================
+   BASE64
+   ===================================================== */
+
+function b64(bytes){
+
+ let s="";
+
+ for(const b of bytes)
+  s+=String.fromCharCode(b);
+
+ return btoa(s);
+
+}
+
+
+function fromB64(value){
+
+ const s=atob(value);
+
+ const arr=
+ new Uint8Array(s.length);
+
+ for(let i=0;i<s.length;i++)
+  arr[i]=s.charCodeAt(i);
+
+ return arr;
+
+}
+
+
+/* =====================================================
+   LOAD
+   ===================================================== */
+
+async function loadVault(){
+
+ try{
+
+  const {data:userData,error:userError}=
+  await client.auth.getUser();
+
+  if(userError)
+   throw userError;
+
+  const user=userData.user;
+
+
+  const {data,error}=
+  await client
+  .from("vault_entries")
+  .select("id,encrypted_data")
+  .eq("user_id",user.id)
+  .maybeSingle();
+
+
+  if(error)
+   throw error;
+
+
+  if(!data){
+
+   vault=[];
+   render();
+   return;
+
+  }
+
+
+  vault=
+  await decryptData(
+   data.encrypted_data
+  );
+
+
+  if(!Array.isArray(vault))
+   vault=[];
+
+
+  render();
+
+
+ }catch(e){
+
+  console.error(e);
+
+  showToast(
+   "Vault load failed."
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   SAVE
+   ===================================================== */
+
+async function saveVault(){
+
+ try{
+
+  const {data:userData,error:userError}=
+  await client.auth.getUser();
+
+  if(userError)
+   throw userError;
+
+  const user=userData.user;
+
+
+  const encrypted=
+  await encryptData(vault);
+
+
+  const {data:existing,error:findError}=
+  await client
+  .from("vault_entries")
+  .select("id")
+  .eq("user_id",user.id)
+  .maybeSingle();
+
+
+  if(findError)
+   throw findError;
+
+
+  if(existing){
+
+   const {error}=
+   await client
+   .from("vault_entries")
+   .update({
+    encrypted_data:encrypted
+   })
+   .eq("id",existing.id)
+   .eq("user_id",user.id);
+
+
+   if(error)
+    throw error;
+
+  }else{
+
+   const {error}=
+   await client
+   .from("vault_entries")
+   .insert({
+    user_id:user.id,
+    encrypted_data:encrypted
+   });
+
+
+   if(error)
+    throw error;
+
+  }
+
+
+  showToast("Saved securely 🔒");
+
+
+ }catch(e){
+
+  console.error(e);
+
+  showToast(
+   "Save failed: "+e.message
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   ADD
+   ===================================================== */
+
+function openAdd(){
+
+ editingIndex=-1;
+
+ document.getElementById(
+  "modalTitle"
+ ).textContent="Add Password";
+
+
+ document.getElementById("title").value="";
+ document.getElementById("loginId").value="";
+ document.getElementById("password").value="";
+ document.getElementById("mpin").value="";
+ document.getElementById("notes").value="";
+
+
+ document.getElementById(
+  "modal"
+ ).classList.remove("hidden");
+
+}
+
+
+function closeModal(){
+
+ document.getElementById(
+  "modal"
+ ).classList.add("hidden");
+
+}
+
+
+/* =====================================================
+   SAVE ENTRY
+   ===================================================== */
+
+async function saveEntry(){
+
+ const entry={
+
+  title:
+  document.getElementById("title")
+  .value.trim(),
+
+  loginId:
+  document.getElementById("loginId")
+  .value.trim(),
+
+  password:
+  document.getElementById("password")
+  .value,
+
+  mpin:
+  document.getElementById("mpin")
+  .value,
+
+  notes:
+  document.getElementById("notes")
+  .value.trim(),
+
+  updatedAt:
+  new Date().toISOString()
+
+ };
+
+
+ if(!entry.title){
+
+  showToast(
+   "Heading required."
+  );
+
+  return;
+
+ }
+
+
+ if(editingIndex===-1)
+  vault.unshift(entry);
+ else
+  vault[editingIndex]=entry;
+
+
+ await saveVault();
+
+ closeModal();
+
+ render();
+
+}
+
+
+/* =====================================================
+   EDIT
+   ===================================================== */
+
+function editEntry(i){
+
+ const e=vault[i];
+
+ editingIndex=i;
+
+
+ document.getElementById(
+  "modalTitle"
+ ).textContent="Edit Password";
+
+
+ document.getElementById("title")
+ .value=e.title||"";
+
+ document.getElementById("loginId")
+ .value=e.loginId||"";
+
+ document.getElementById("password")
+ .value=e.password||"";
+
+ document.getElementById("mpin")
+ .value=e.mpin||"";
+
+ document.getElementById("notes")
+ .value=e.notes||"";
+
+
+ document.getElementById(
+  "modal"
+ ).classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+   DELETE
+   ===================================================== */
+
+async function deleteEntry(i){
+
+ if(!confirm(
+  `Delete "${vault[i].title}"?`
+ ))
+ return;
+
+
+ vault.splice(i,1);
+
+ await saveVault();
+
+ render();
+
+}
+
+
+/* =====================================================
+   SHOW / HIDE
+   ===================================================== */
+
+function toggle(button){
+
+ const span=
+ button.parentElement
+ .querySelector(".secret");
+
+
+ if(span.dataset.hidden==="true"){
+
+  span.textContent=
+  span.dataset.value;
+
+  span.dataset.hidden="false";
+
+  button.textContent="🙈";
+
+ }else{
+
+  span.textContent="••••••••";
+
+  span.dataset.hidden="true";
+
+  button.textContent="👁";
+
+ }
+
+}
+
+
+/* =====================================================
+   RENDER
+   ===================================================== */
+
+function render(){
+
+ const grid=
+ document.getElementById("grid");
+
+ const search=
+ (
+  document.getElementById("search")
+  ?.value||""
+ )
+ .toLowerCase()
+ .trim();
+
+
+ const list=
+ vault.filter(e=>
+
+  (e.title||"")
+  .toLowerCase()
+  .includes(search)
+
+  ||
+
+  (e.loginId||"")
+  .toLowerCase()
+  .includes(search)
+
+  ||
+
+  (e.notes||"")
+  .toLowerCase()
+  .includes(search)
+
+ );
+
+
+ document.getElementById(
+  "count"
+ ).textContent=vault.length;
+
+
+ if(!list.length){
+
+  grid.innerHTML=`
+   <div class="empty">
+    <div style="font-size:45px">🔐</div>
+    <br>
+    ${
+     vault.length
+     ?"No matching entry."
+     :"No passwords saved yet."
+    }
+   </div>
+  `;
+
+  return;
+
+ }
+
+
+ grid.innerHTML=
+ list.map(e=>{
+
+  const i=vault.indexOf(e);
+
+  return card(e,i);
+
+ }).join("");
+
+}
+
+
+/* =====================================================
+   CARD
+   ===================================================== */
+
+function card(e,i){
+
+ return `
+
+ <div class="card">
+
+  <div class="cardHead">
+
+   <div class="cardIcon">
+    🔐
+   </div>
+
+   <div>
+
+    <h3>
+     ${esc(e.title||"Untitled")}
+    </h3>
+
+    <div class="date">
+     ${date(e.updatedAt)}
+    </div>
+
+   </div>
+
+  </div>
+
+
+  <div class="row">
+
+   <label>Login ID</label>
+
+   <div class="val">
+
+    <span>
+     ${esc(e.loginId||"—")}
+    </span>
+
+   </div>
+
+  </div>
+
+
+  <div class="row">
+
+   <label>Password</label>
+
+   <div class="val">
+
+    <span
+     class="secret"
+     data-value="${esc(e.password||"")}"
+     data-hidden="true">
+     ••••••••
+    </span>
+
+    <button
+     class="eye"
+     onclick="toggle(this)">
+     👁
+    </button>
+
+   </div>
+
+  </div>
+
+
+  <div class="row">
+
+   <label>MPIN</label>
+
+   <div class="val">
+
+    <span
+     class="secret"
+     data-value="${esc(e.mpin||"")}"
+     data-hidden="true">
+     ••••
+    </span>
+
+    <button
+     class="eye"
+     onclick="toggle(this)">
+     👁
+    </button>
+
+   </div>
+
+  </div>
+
+
+  ${
+   e.notes
+   ?`
+   <div class="row">
+
+    <label>Notes</label>
+
+    <div class="note">
+     ${esc(e.notes)}
+    </div>
+
+   </div>
+   `
+   :""
+  }
+
+
+  <div class="actions">
+
+   <button
+    onclick="editEntry(${i})">
+    ✏️ Edit
+   </button>
+
+   <button
+    class="del"
+    onclick="deleteEntry(${i})">
+    🗑️ Delete
+   </button>
+
+  </div>
+
+ </div>
+
+ `;
+
+}
+
+
+/* =====================================================
+   ESCAPE
+   ===================================================== */
+
+function esc(v){
+
+ return String(v)
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================================
+   DATE
+   ===================================================== */
+
+function date(v){
+
+ if(!v)return "";
+
+ try{
+
+  return new Date(v)
+  .toLocaleDateString(
+   "en-IN",
+   {
+    day:"2-digit",
+    month:"short",
+    year:"numeric"
+   }
+  );
+
+ }catch{
+
+  return "";
+
+ }
+
+}
+
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+
+let toastTimer;
+
+function showToast(msg){
+
+ const t=
+ document.getElementById("toast");
+
+ t.textContent=msg;
+
+ t.classList.remove("hidden");
+
+ clearTimeout(toastTimer);
+
+ toastTimer=
+ setTimeout(
+  ()=>t.classList.add("hidden"),
+  3000
+ );
+
+}
+
+
+/* ENTER TO LOGIN */
+
+document
+.getElementById("masterPassword")
+.addEventListener(
+ "keydown",
+ e=>{
+  if(e.key==="Enter")
+   login();
+ }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,1710 +1,266 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Password Vault</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Inter,Arial,sans-serif;
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 
 body{
-    min-height:100vh;
-    background:
-        radial-gradient(circle at top,#182235 0,#090d15 45%,#05070b 100%);
-    color:#fff;
+  min-height:100vh;
+  color:#fff;
+  background:linear-gradient(145deg,#070b12,#101827,#070b12);
 }
 
-button,input,textarea{
-    font:inherit;
+button,input,textarea{font:inherit}
+
+.hidden{display:none!important}
+
+.login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-.hidden{
-    display:none!important;
-}
-
-/* LOGIN */
-
-.login-page{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-
-.login-card{
-    width:100%;
-    max-width:420px;
-    padding:34px 25px;
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:25px;
-    background:rgba(15,21,33,.82);
-    backdrop-filter:blur(20px);
-    box-shadow:0 25px 70px rgba(0,0,0,.45);
+.login-box{
+  width:100%;
+  max-width:400px;
+  padding:30px;
+  border-radius:25px;
+  background:rgba(17,25,39,.92);
+  border:1px solid #26344b;
+  box-shadow:0 25px 80px #0008;
 }
 
 .logo{
-    width:68px;
-    height:68px;
-    border-radius:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:0 auto 20px;
-    font-size:32px;
-    background:linear-gradient(135deg,#315efb,#7b3ff2);
-    box-shadow:0 12px 30px rgba(64,91,255,.3);
+  width:70px;
+  height:70px;
+  margin:0 auto 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:20px;
+  font-size:32px;
+  background:linear-gradient(135deg,#4169ff,#743dff);
 }
 
-.login-card h1{
-    text-align:center;
-    font-size:25px;
-    margin-bottom:8px;
+h1{text-align:center;font-size:25px}
+.sub{text-align:center;color:#8490a5;font-size:13px;margin:8px 0 28px}
+
+.field{margin-bottom:16px}
+
+label{
+  display:block;
+  color:#9da9bb;
+  font-size:12px;
+  margin-bottom:7px;
 }
 
-.subtitle{
-    text-align:center;
-    color:#8792a8;
-    font-size:13px;
-    margin-bottom:28px;
+input,textarea{
+  width:100%;
+  padding:13px;
+  border-radius:11px;
+  border:1px solid #29364b;
+  outline:none;
+  background:#0a111d;
+  color:#fff;
 }
 
-.field{
-    margin-bottom:17px;
+input:focus,textarea:focus{border-color:#5272ff}
+
+.btn{
+  width:100%;
+  border:0;
+  padding:14px;
+  border-radius:12px;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(135deg,#4169ff,#743dff);
 }
 
-.field label{
-    display:block;
-    color:#9da8ba;
-    font-size:12px;
-    margin-bottom:7px;
-}
-
-.field input,
-.field textarea{
-    width:100%;
-    border:1px solid #263147;
-    outline:none;
-    color:white;
-    background:#0b111c;
-    border-radius:12px;
-    padding:13px 14px;
-}
-
-.field input:focus,
-.field textarea:focus{
-    border-color:#5375ff;
-}
-
-.login-btn,
-.primary-btn{
-    width:100%;
-    border:0;
-    border-radius:13px;
-    padding:14px;
-    color:#fff;
-    font-weight:700;
-    cursor:pointer;
-    background:linear-gradient(135deg,#4169ff,#713cff);
-    box-shadow:0 10px 25px rgba(72,75,255,.22);
-}
-
-.message{
-    margin-top:15px;
-    text-align:center;
-    font-size:13px;
-    color:#ff8d8d;
+.error{
+  color:#ff8585;
+  text-align:center;
+  font-size:13px;
+  margin-top:13px;
 }
 
 /* APP */
 
-.app{
-    min-height:100vh;
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#080d16ee;
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid #1e293b;
 }
 
 .header{
-    position:sticky;
-    top:0;
-    z-index:20;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    background:rgba(6,10,17,.82);
-    backdrop-filter:blur(18px);
-}
-
-.header-inner{
-    max-width:1100px;
-    margin:auto;
-    padding:15px 18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
+  max-width:1100px;
+  margin:auto;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
 .brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .brand-icon{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#4169ff,#713cff);
-}
-
-.brand h2{
-    font-size:16px;
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,#4169ff,#743dff);
 }
 
 .brand small{
-    color:#778298;
-    font-size:11px;
+  color:#718096;
+  font-size:11px;
 }
 
 .logout{
-    border:1px solid #293348;
-    background:#101725;
-    color:#cbd3e2;
-    padding:9px 12px;
-    border-radius:10px;
-    cursor:pointer;
+  background:#111a29;
+  color:#cbd5e1;
+  border:1px solid #2a374c;
+  border-radius:9px;
+  padding:9px 13px;
+  cursor:pointer;
 }
 
 .container{
-    max-width:1100px;
-    margin:auto;
-    padding:25px 18px 50px;
+  max-width:1100px;
+  margin:auto;
+  padding:22px 18px 50px;
 }
 
-.topbar{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:20px;
+.top{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
 }
 
-.search{
-    flex:1;
-}
+.search{flex:1}
 
-.search input{
-    width:100%;
-    padding:13px 15px;
-    border-radius:12px;
-    border:1px solid #263147;
-    background:#0b111c;
-    color:white;
-    outline:none;
-}
-
-.add-btn{
-    border:0;
-    color:white;
-    background:linear-gradient(135deg,#4169ff,#713cff);
-    padding:13px 17px;
-    border-radius:12px;
-    font-weight:700;
-    cursor:pointer;
-    white-space:nowrap;
+.add{
+  width:auto;
+  padding:0 18px;
+  white-space:nowrap;
 }
 
 .stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-bottom:22px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:20px;
 }
 
 .stat{
-    background:#0d1420;
-    border:1px solid #1c2638;
-    border-radius:15px;
-    padding:15px;
+  padding:15px;
+  border-radius:15px;
+  background:#0d1522;
+  border:1px solid #202c40;
 }
 
-.stat small{
-    color:#778298;
-}
-
-.stat strong{
-    display:block;
-    font-size:22px;
-    margin-top:5px;
-}
+.stat small{color:#738096}
+.stat strong{display:block;font-size:21px;margin-top:5px}
 
 .grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
 }
 
 .card{
-    background:rgba(13,20,32,.9);
-    border:1px solid #202b3e;
-    border-radius:18px;
-    padding:18px;
-}
-
-.card-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:15px;
+  padding:18px;
+  border-radius:18px;
+  background:#0d1522;
+  border:1px solid #202c40;
 }
 
 .card-title{
-    display:flex;
-    align-items:center;
-    gap:10px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:15px;
 }
 
-.card-icon{
-    width:40px;
-    height:40px;
-    border-radius:11px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#172239;
-    font-size:19px;
+.icon{
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:11px;
+  background:#17233a;
 }
 
-.card h3{
-    font-size:16px;
+.card h3{font-size:16px}
+
+.row{
+  border-top:1px solid #1d293b;
+  padding:10px 0;
 }
 
-.card-date{
-    color:#68748a;
-    font-size:10px;
+.row-label{
+  color:#718096;
+  font-size:10px;
+  text-transform:uppercase;
+  margin-bottom:5px;
 }
 
-.data-row{
-    padding:10px 0;
-    border-top:1px solid #1b2536;
+.value{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  word-break:break-all;
 }
 
-.data-label{
-    color:#68748a;
-    font-size:10px;
-    text-transform:uppercase;
-    margin-bottom:5px;
-}
-
-.data-value{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    color:#dce3ef;
-    font-size:13px;
-    word-break:break-all;
-}
-
-.value-text{
-    flex:1;
-}
+.value span{flex:1}
 
 .eye{
-    border:0;
-    background:#172136;
-    color:#aeb9cc;
-    width:34px;
-    height:30px;
-    border-radius:8px;
-    cursor:pointer;
+  border:0;
+  border-radius:7px;
+  background:#172238;
+  color:#fff;
+  padding:7px 9px;
+  cursor:pointer;
 }
 
 .notes{
-    color:#9ca7b9;
-    font-size:12px;
-    line-height:1.5;
+  color:#9aa6b8;
+  font-size:12px;
+  line-height:1.5;
 }
 
 .actions{
-    display:flex;
-    gap:8px;
-    margin-top:14px;
+  display:flex;
+  gap:8px;
+  margin-top:13px;
 }
 
-.edit-btn,
-.delete-btn{
-    flex:1;
-    border:1px solid #29354a;
-    background:#111a29;
-    color:#ccd5e5;
-    padding:9px;
-    border-radius:9px;
-    cursor:pointer;
+.actions button{
+  flex:1;
+  padding:9px;
+  border-radius:9px;
+  cursor:pointer;
+  background:#111a29;
+  color:#dbe4f2;
+  border:1px solid #29374d;
 }
 
-.delete-btn{
-    color:#ff8585;
-}
-
-/* MODAL */
-
-.modal{
-    position:fixed;
-    inset:0;
-    z-index:50;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:18px;
-    background:rgba(0,0,0,.72);
-    backdrop-filter:blur(7px);
-}
-
-.modal-box{
-    width:100%;
-    max-width:480px;
-    max-height:90vh;
-    overflow:auto;
-    background:#0d1420;
-    border:1px solid #273349;
-    border-radius:20px;
-    padding:22px;
-}
-
-.modal-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:20px;
-}
-
-.modal-head h2{
-    font-size:19px;
-}
-
-.close{
-    width:34px;
-    height:34px;
-    border:0;
-    border-radius:9px;
-    background:#172136;
-    color:#fff;
-    cursor:pointer;
-}
-
-.modal-actions{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
-}
-
-.cancel-btn{
-    flex:1;
-    border:1px solid #29354a;
-    background:#111a29;
-    color:white;
-    padding:13px;
-    border-radius:11px;
-}
-
-.save-btn{
-    flex:1;
-    border:0;
-    background:linear-gradient(135deg,#4169ff,#713cff);
-    color:white;
-    padding:13px;
-    border-radius:11px;
-    font-weight:700;
-}
-
-.empty{
-    text-align:center;
-    padding:70px 20px;
-    color:#657187;
-}
-
-.toast{
-    position:fixed;
-    left:50%;
-    bottom:25px;
-    transform:translateX(-50%);
-    z-index:100;
-    background:#162033;
-    border:1px solid #2a3850;
-    color:white;
-    padding:12px 18px;
-    border-radius:12px;
-    box-shadow:0 10px 35px rgba(0,0,0,.4);
-    font-size:13px;
-}
-
-@media(max-width:700px){
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-    .stats{
-        grid-template-columns:repeat(3,1fr);
-    }
-
-    .stat{
-        padding:11px;
-    }
-
-    .stat strong{
-        font-size:18px;
-    }
-
-    .topbar{
-        flex-direction:column;
-        align-items:stretch;
-    }
-
-    .add-btn{
-        width:100%;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<!-- LOGIN -->
-<section id="loginPage" class="login-page">
-    <div class="login-card">
-
-        <div class="logo">🔐</div>
-
-        <h1>My Password Vault</h1>
-        <p class="subtitle">
-            Secure encrypted password storage
-        </p>
-
-        <div class="field">
-            <label>Master ID</label>
-            <input id="masterId" type="text" autocomplete="username"
-                   placeholder="Enter Master ID">
-        </div>
-
-        <div class="field">
-            <label>Master Password</label>
-            <input id="masterPassword" type="password"
-                   autocomplete="current-password"
-                   placeholder="Enter Master Password">
-        </div>
-
-        <button class="login-btn" onclick="login()">
-            LOGIN
-        </button>
-
-        <div id="loginMessage" class="message"></div>
-
-    </div>
-</section>
-
-
-<!-- APP -->
-<section id="app" class="app hidden">
-
-    <header class="header">
-        <div class="header-inner">
-
-            <div class="brand">
-                <div class="brand-icon">🔐</div>
-                <div>
-                    <h2>My Password Vault</h2>
-                    <small>Encrypted Cloud Vault</small>
-                </div>
-            </div>
-
-            <button class="logout" onclick="logout()">
-                Logout
-            </button>
-
-        </div>
-    </header>
-
-    <main class="container">
-
-        <div class="topbar">
-
-            <div class="search">
-                <input id="searchInput"
-                       type="search"
-                       placeholder="🔎 Search passwords..."
-                       oninput="renderVault()">
-            </div>
-
-            <button class="add-btn" onclick="openAddModal()">
-                ＋ Add New
-            </button>
-
-        </div>
-
-        <div class="stats">
-
-            <div class="stat">
-                <small>Total Entries</small>
-                <strong id="totalEntries">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>Encrypted</small>
-                <strong>🔒</strong>
-            </div>
-
-            <div class="stat">
-                <small>Status</small>
-                <strong>Online</strong>
-            </div>
-
-        </div>
-
-        <div id="vaultGrid" class="grid"></div>
-
-    </main>
-
-</section>
-
-
-<!-- ADD / EDIT MODAL -->
-<div id="modal" class="modal hidden">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-            <h2 id="modalTitle">Add Password</h2>
-            <button class="close" onclick="closeModal()">✕</button>
-        </div>
-
-        <div class="field">
-            <label>Heading / Service Name</label>
-            <input id="entryTitle"
-                   placeholder="Example: SBI Bank">
-        </div>
-
-        <div class="field">
-            <label>Login ID / Username</label>
-            <input id="entryLoginId"
-                   placeholder="Enter login ID">
-        </div>
-
-        <div class="field">
-            <label>Password</label>
-            <input id="entryPassword"
-                   type="password"
-                   placeholder="Enter password">
-        </div>
-
-        <div class="field">
-            <label>MPIN</label>
-            <input id="entryMpin"
-                   type="password"
-                   inputmode="numeric"
-                   placeholder="Enter MPIN">
-        </div>
-
-        <div class="field">
-            <label>Notes</label>
-            <textarea id="entryNotes"
-                      rows="3"
-                      placeholder="Optional notes"></textarea>
-        </div>
-
-        <div class="modal-actions">
-
-            <button class="cancel-btn"
-                    onclick="closeModal()">
-                Cancel
-            </button>
-
-            <button class="save-btn"
-                    onclick="saveEntry()">
-                Save Securely
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div id="toast" class="toast hidden"></div>
-
-
-<script>
-
-/* =========================================================
-   SUPABASE CONFIG
-   ========================================================= */
-
-const SUPABASE_URL =
-"YOUR_SUPABASE_URL";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"YOUR_SUPABASE_PUBLISHABLE_KEY";
-
-/*
-   IMPORTANT:
-   This is only your visible Master ID.
-   DO NOT put your Master Password here.
-*/
-const MASTER_ID = "maanu";
-
-
-/* Supabase client */
-
-const { createClient } = supabase;
-
-const db = createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
-
-
-/* =========================================================
-   GLOBAL VARIABLES
-   ========================================================= */
-
-let vault = [];
-let editingIndex = -1;
-
-/*
-   Encryption key is kept only in memory.
-
-   It disappears when the page is closed/logged out.
-*/
-let encryptionKey = null;
-
-
-/* =========================================================
-   LOGIN
-   ========================================================= */
-
-async function login(){
-
-    const id =
-        document.getElementById("masterId").value.trim();
-
-    const password =
-        document.getElementById("masterPassword").value;
-
-    const msg =
-        document.getElementById("loginMessage");
-
-    msg.textContent = "";
-
-    if(!id || !password){
-
-        msg.textContent =
-            "Please enter Master ID and Password.";
-
-        return;
-    }
-
-    if(id !== MASTER_ID){
-
-        msg.textContent =
-            "Invalid Master ID.";
-
-        return;
-    }
-
-    if(
-        SUPABASE_URL.includes("YOUR_") ||
-        SUPABASE_PUBLISHABLE_KEY.includes("YOUR_")
-    ){
-
-        msg.textContent =
-            "Please configure Supabase settings in index.html.";
-
-        return;
-    }
-
-    try{
-
-        /*
-           Your Supabase Auth user is the email/password
-           account you created in Supabase.
-        */
-
-        const email = prompt(
-            "Enter your Supabase login email:"
-        );
-
-        if(!email){
-
-            msg.textContent =
-                "Login cancelled.";
-
-            return;
-        }
-
-        const { data, error } =
-            await db.auth.signInWithPassword({
-                email: email.trim(),
-                password: password
-            });
-
-        if(error){
-
-            console.error(error);
-
-            msg.textContent =
-                "Login failed: " + error.message;
-
-            return;
-        }
-
-        /*
-           Derive encryption key from Master Password.
-        */
-
-        encryptionKey =
-            await deriveKey(password);
-
-        document.getElementById("loginPage")
-            .classList.add("hidden");
-
-        document.getElementById("app")
-            .classList.remove("hidden");
-
-        await loadVault();
-
-        /*
-           Clear password input.
-        */
-
-        document.getElementById("masterPassword").value = "";
-
-    }catch(error){
-
-        console.error(error);
-
-        msg.textContent =
-            "Something went wrong.";
-
-    }
-}
-
-
-/* =========================================================
-   LOGOUT
-   ========================================================= */
-
-async function logout(){
-
-    await db.auth.signOut();
-
-    vault = [];
-    encryptionKey = null;
-
-    document.getElementById("app")
-        .classList.add("hidden");
-
-    document.getElementById("loginPage")
-        .classList.remove("hidden");
-
-    document.getElementById("masterId").value = "";
-    document.getElementById("masterPassword").value = "";
-
-    renderVault();
-}
-
-
-/* =========================================================
-   PASSWORD -> ENCRYPTION KEY
-   ========================================================= */
-
-async function deriveKey(password){
-
-    const encoder =
-        new TextEncoder();
-
-    const passwordBytes =
-        encoder.encode(password);
-
-    /*
-       PBKDF2 makes the password-derived key
-       much harder to brute force.
-    */
-
-    const baseKey =
-        await crypto.subtle.importKey(
-            "raw",
-            passwordBytes,
-            "PBKDF2",
-            false,
-            ["deriveKey"]
-        );
-
-    /*
-       Fixed salt is used so another device can
-       derive the same key from the same password.
-
-       The actual vault remains encrypted.
-    */
-
-    const salt =
-        encoder.encode(
-            "my-password-vault-v1"
-        );
-
-    return await crypto.subtle.deriveKey(
-        {
-            name:"PBKDF2",
-            salt:salt,
-            iterations:250000,
-            hash:"SHA-256"
-        },
-        baseKey,
-        {
-            name:"AES-GCM",
-            length:256
-        },
-        false,
-        ["encrypt","decrypt"]
-    );
-}
-
-
-/* =========================================================
-   ENCRYPT
-   ========================================================= */
-
-async function encryptData(data){
-
-    const iv =
-        crypto.getRandomValues(
-            new Uint8Array(12)
-        );
-
-    const encoded =
-        new TextEncoder().encode(
-            JSON.stringify(data)
-        );
-
-    const encrypted =
-        await crypto.subtle.encrypt(
-            {
-                name:"AES-GCM",
-                iv:iv
-            },
-            encryptionKey,
-            encoded
-        );
-
-    return JSON.stringify({
-
-        iv:arrayToBase64(iv),
-
-        data:arrayToBase64(
-            new Uint8Array(encrypted)
-        )
-
-    });
-}
-
-
-/* =========================================================
-   DECRYPT
-   ========================================================= */
-
-async function decryptData(payload){
-
-    const parsed =
-        JSON.parse(payload);
-
-    const iv =
-        base64ToArray(parsed.iv);
-
-    const encrypted =
-        base64ToArray(parsed.data);
-
-    const decrypted =
-        await crypto.subtle.decrypt(
-            {
-                name:"AES-GCM",
-                iv:iv
-            },
-            encryptionKey,
-            encrypted
-        );
-
-    return JSON.parse(
-        new TextDecoder().decode(decrypted)
-    );
-}
-
-
-/* =========================================================
-   BASE64 HELPERS
-   ========================================================= */
-
-function arrayToBase64(bytes){
-
-    let binary = "";
-
-    bytes.forEach(
-        byte => binary +=
-            String.fromCharCode(byte)
-    );
-
-    return btoa(binary);
-}
-
-
-function base64ToArray(base64){
-
-    const binary =
-        atob(base64);
-
-    const bytes =
-        new Uint8Array(binary.length);
-
-    for(let i=0;i<binary.length;i++){
-
-        bytes[i] =
-            binary.charCodeAt(i);
-    }
-
-    return bytes;
-}
-
-
-/* =========================================================
-   LOAD VAULT
-   ========================================================= */
-
-async function loadVault(){
-
-    try{
-
-        const {
-            data:userData
-        } = await db.auth.getUser();
-
-        const user =
-            userData.user;
-
-        if(!user){
-
-            throw new Error(
-                "User session not found."
-            );
-        }
-
-        const { data, error } =
-            await db
-                .from("vault_entries")
-                .select("id, encrypted_data")
-                .eq("user_id", user.id)
-                .maybeSingle();
-
-        if(error){
-
-            console.error(error);
-
-            showToast(
-                "Could not load vault."
-            );
-
-            return;
-        }
-
-        if(!data){
-
-            vault = [];
-
-            renderVault();
-
-            return;
-        }
-
-        try{
-
-            vault =
-                await decryptData(
-                    data.encrypted_data
-                );
-
-            if(!Array.isArray(vault)){
-
-                vault = [];
-
-            }
-
-        }catch(error){
-
-            console.error(error);
-
-            showToast(
-                "Unable to decrypt vault. Check password."
-            );
-
-            vault = [];
-
-        }
-
-        renderVault();
-
-    }catch(error){
-
-        console.error(error);
-
-        showToast(
-            "Failed to load vault."
-        );
-    }
-}
-
-
-/* =========================================================
-   SAVE WHOLE VAULT
-   ========================================================= */
-
-async function saveVault(){
-
-    try{
-
-        const {
-            data:userData
-        } = await db.auth.getUser();
-
-        const user =
-            userData.user;
-
-        if(!user){
-
-            throw new Error(
-                "Not authenticated."
-            );
-        }
-
-        const encrypted =
-            await encryptData(vault);
-
-        /*
-           Check if user's row already exists.
-        */
-
-        const {
-            data:existing,
-            error:findError
-        } = await db
-            .from("vault_entries")
-            .select("id")
-            .eq("user_id", user.id)
-            .maybeSingle();
-
-        if(findError){
-
-            throw findError;
-        }
-
-        if(existing){
-
-            const { error } =
-                await db
-                    .from("vault_entries")
-                    .update({
-                        encrypted_data:encrypted
-                    })
-                    .eq("id", existing.id)
-                    .eq("user_id", user.id);
-
-            if(error){
-
-                throw error;
-            }
-
-        }else{
-
-            const { error } =
-                await db
-                    .from("vault_entries")
-                    .insert({
-                        user_id:user.id,
-                        encrypted_data:encrypted
-                    });
-
-            if(error){
-
-                throw error;
-            }
-        }
-
-        showToast(
-            "Saved securely 🔒"
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        showToast(
-            "Save failed: " + error.message
-        );
-
-    }
-}
-
-
-/* =========================================================
-   ADD MODAL
-   ========================================================= */
-
-function openAddModal(){
-
-    editingIndex = -1;
-
-    document.getElementById("modalTitle")
-        .textContent = "Add Password";
-
-    document.getElementById("entryTitle").value = "";
-    document.getElementById("entryLoginId").value = "";
-    document.getElementById("entryPassword").value = "";
-    document.getElementById("entryMpin").value = "";
-    document.getElementById("entryNotes").value = "";
-
-    document.getElementById("modal")
-        .classList.remove("hidden");
-}
-
-
-function closeModal(){
-
-    document.getElementById("modal")
-        .classList.add("hidden");
-}
-
-
-/* =========================================================
-   SAVE ENTRY
-   ========================================================= */
-
-async function saveEntry(){
-
-    const title =
-        document.getElementById("entryTitle")
-            .value.trim();
-
-    const loginId =
-        document.getElementById("entryLoginId")
-            .value.trim();
-
-    const password =
-        document.getElementById("entryPassword")
-            .value;
-
-    const mpin =
-        document.getElementById("entryMpin")
-            .value;
-
-    const notes =
-        document.getElementById("entryNotes")
-            .value.trim();
-
-
-    if(!title){
-
-        showToast(
-            "Heading is required."
-        );
-
-        return;
-    }
-
-    if(!loginId && !password && !mpin){
-
-        showToast(
-            "Enter at least one credential."
-        );
-
-        return;
-    }
-
-
-    const entry = {
-
-        title:title,
-
-        loginId:loginId,
-
-        password:password,
-
-        mpin:mpin,
-
-        notes:notes,
-
-        updatedAt:
-            new Date().toISOString()
-
-    };
-
-
-    if(editingIndex === -1){
-
-        vault.unshift(entry);
-
-    }else{
-
-        vault[editingIndex] = entry;
-
-    }
-
-
-    await saveVault();
-
-    closeModal();
-
-    renderVault();
-}
-
-
-/* =========================================================
-   EDIT
-   ========================================================= */
-
-function editEntry(index){
-
-    const entry =
-        vault[index];
-
-    editingIndex = index;
-
-    document.getElementById("modalTitle")
-        .textContent = "Edit Password";
-
-    document.getElementById("entryTitle")
-        .value = entry.title || "";
-
-    document.getElementById("entryLoginId")
-        .value = entry.loginId || "";
-
-    document.getElementById("entryPassword")
-        .value = entry.password || "";
-
-    document.getElementById("entryMpin")
-        .value = entry.mpin || "";
-
-    document.getElementById("entryNotes")
-        .value = entry.notes || "";
-
-    document.getElementById("modal")
-        .classList.remove("hidden");
-}
-
-
-/* =========================================================
-   DELETE
-   ========================================================= */
-
-async function deleteEntry(index){
-
-    const entry =
-        vault[index];
-
-    if(!confirm(
-        `Delete "${entry.title}"?`
-    )){
-
-        return;
-    }
-
-    vault.splice(index,1);
-
-    await saveVault();
-
-    renderVault();
-}
-
-
-/* =========================================================
-   SHOW / HIDE VALUE
-   ========================================================= */
-
-function toggleValue(button){
-
-    const value =
-        button.parentElement
-            .querySelector(".value-text");
-
-    const hidden =
-        value.dataset.hidden === "true";
-
-    if(hidden){
-
-        value.textContent =
-            value.dataset.value;
-
-        value.dataset.hidden =
-            "false";
-
-        button.textContent = "🙈";
-
-    }else{
-
-        value.textContent =
-            "••••••••";
-
-        value.dataset.hidden =
-            "true";
-
-        button.textContent = "👁";
-    }
-}
-
-
-/* =========================================================
-   RENDER
-   ========================================================= */
-
-function renderVault(){
-
-    const grid =
-        document.getElementById("vaultGrid");
-
-    const search =
-        document.getElementById("searchInput")
-            ?.value
-            .toLowerCase()
-            .trim() || "";
-
-    const filtered =
-        vault.filter(entry => {
-
-            return (
-                (entry.title || "")
-                    .toLowerCase()
-                    .includes(search)
-
-                ||
-
-                (entry.loginId || "")
-                    .toLowerCase()
-                    .includes(search)
-
-                ||
-
-                (entry.notes || "")
-                    .toLowerCase()
-                    .includes(search)
-            );
-        });
-
-
-    document.getElementById("totalEntries")
-        .textContent = vault.length;
-
-
-    if(filtered.length === 0){
-
-        grid.innerHTML = `
-            <div class="empty" style="grid-column:1/-1">
-                <div style="font-size:42px;margin-bottom:12px">
-                    🔐
-                </div>
-                <div>
-                    ${
-                        vault.length === 0
-                        ? "No passwords saved yet."
-                        : "No matching passwords."
-                    }
-                </div>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    grid.innerHTML =
-        filtered.map(entry => {
-
-            const originalIndex =
-                vault.indexOf(entry);
-
-            return createCard(
-                entry,
-                originalIndex
-            );
-
-        }).join("");
-}
-
-
-/* =========================================================
-   CARD
-   ========================================================= */
-
-function createCard(entry,index){
-
-    const title =
-        escapeHtml(
-            entry.title || "Untitled"
-        );
-
-    const loginId =
-        escapeHtml(
-            entry.loginId || ""
-        );
-
-    const password =
-        escapeHtml(
-            entry.password || ""
-        );
-
-    const mpin =
-        escapeHtml(
-            entry.mpin || ""
-        );
-
-    const notes =
-        escapeHtml(
-            entry.notes || ""
-        );
-
-
-    return `
-
-        <div class="card">
-
-            <div class="card-head">
-
-                <div class="card-title">
-
-                    <div class="card-icon">
-                        🔐
-                    </div>
-
-                    <div>
-                        <h3>${title}</h3>
-
-                        <div class="card-date">
-                            ${formatDate(entry.updatedAt)}
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="data-row">
-
-                <div class="data-label">
-                    Login ID
-                </div>
-
-                <div class="data-value">
-
-                    <span class="value-text"
-                          data-value="${loginId}"
-                          data-hidden="false">
-                        ${loginId || "—"}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="data-row">
-
-                <div class="data-label">
-                    Password
-                </div>
-
-                <div class="data-value">
-
-                    <span class="value-text"
-                          data-value="${password}"
-                          data-hidden="true">
-                        ••••••••
-                    </span>
-
-                    <button class="eye"
-                            onclick="toggleValue(this)">
-                        👁
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="data-row">
-
-                <div class="data-label">
-                    MPIN
-                </div>
-
-                <div class="data-value">
-
-                    <span class="value-text"
-                          data-value="${mpin}"
-                          data-hidden="true">
-                        ••••
-                    </span>
-
-                    <button class="eye"
-                            onclick="toggleValue(this)">
-                        👁
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            ${
-                notes
-                ?
-                `
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Notes
-                    </div>
-
-                    <div class="notes">
-                        ${notes}
-                    </div>
-
-                </div>
-                `
-                :
-                ""
-            }
-
-
-            <div class="actions">
-
-                <button class="edit-btn"
-                        onclick="editEntry(${index})">
-                    ✏️ Edit
-                </button>
-
-                <button class="delete-btn"
-                        onclick="deleteEntry(${index})">
-                    🗑️ Delete
-                </button>
-
-            </div>
-
-        </div>
-    `;
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-   ========================================================= */
-
-function escapeHtml(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
-
-
-/* =========================================================
-   DATE
-   ========================================================= */
-
-function formatDate(date){
-
-    if(!date){
-        return "";
-    }
-
-    try{
-
-        return new Date(date)
-            .toLocaleString(
-                "en-IN",
-                {
-                    day:"2-digit",
-                    month:"short",
-                    year:"numeric"
-                }
-            );
-
-    }catch{
-
-        return "";
-    }
-}
-
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-let toastTimer;
-
-function showToast(message){
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent =
-        message;
-
-    toast.classList.remove(
-        "hidden"
-    );
-
-    clearTimeout(toastTimer);
-
-    toastTimer =
-        setTimeout(() => {
-
-            toast.classList.add(
-                "hidden"
-            );
-
-        },3000);
-}
-
-
-/* =========================================================
-   ENTER KEY LOGIN
-   ========================================================= */
-
-document
-    .getElementById("masterPassword")
-    .addEventListener(
-        "keydown",
-        function(event){
-
-            if(event.key === "Enter"){
-
-                login();
-
-            }
-
-        }
-    );
-
-</script>
-
-</body>
-</html>
+.actions .delete{
